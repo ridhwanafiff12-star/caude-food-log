@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Food Log</title>
+<meta name="theme-color" content="#7c4dff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Food Log">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f3ff;--card:#fff;--ink:#1f1a3a;--mute:#6b6590;--rule:#ddd6f5;--acc:#7c4dff;--accInk:#fff;--on:#1f1a3a;--c1:#ffc233;--c2:#5fdca0;--c3:#ff7b9c;--c4:#6cc8ff;--serif:"Fraunces",Georgia,"Times New Roman",serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151230;--card:#1f1a42;--ink:#f3f0ff;--mute:#a9a3d0;--rule:#3b3469;--acc:#b79cff;--accInk:#1a1238;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#151230;--card:#1f1a42;--ink:#f3f0ff;--mute:#a9a3d0;--rule:#3b3469;--acc:#b79cff;--accInk:#1a1238;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--sans)}
+.wrap{max-width:540px;margin:0 auto;padding:20px 18px 80px}
+h1{font:600 34px/1.1 var(--serif);margin:6px 0 4px}
+.sub{color:var(--mute);font:italic 400 15px var(--serif)}
+.slip{margin-top:18px;padding:16px 0;border-top:3px double var(--rule);border-bottom:3px double var(--rule)}
+input{width:100%;min-width:0;font:inherit;color:var(--ink);background:transparent;border:1px solid var(--rule);border-radius:8px;padding:12px}
+input:focus-visible,button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.row{display:flex;gap:8px;margin-top:8px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:transparent;border:1px solid var(--rule);border-radius:999px;padding:7px 13px;cursor:pointer}
+.chip.on{background:var(--acc);color:var(--accInk);border-color:var(--acc)}
+.btn{width:100%;margin-top:12px;font:600 16px var(--sans);color:var(--accInk);background:var(--acc);border:0;border-radius:8px;padding:14px;cursor:pointer}
+.h3{font:italic 400 15px var(--serif);color:var(--mute);margin:18px 0 0}
+h2{display:flex;justify-content:space-between;align-items:baseline;font:600 24px var(--serif);margin:28px 0 10px;padding-bottom:6px;border-bottom:3px double var(--rule)}
+h2 span{font:italic 400 15px var(--serif);color:var(--mute)}
+.it{padding:8px 0}
+.l{display:flex;align-items:baseline;gap:8px}
+.l b{font:600 18px var(--serif);overflow-wrap:anywhere}
+.l i{flex:1;min-width:16px;border-bottom:2px dotted var(--rule)}
+.l span{color:var(--mute);font-size:14px;white-space:nowrap}
+.m{color:var(--mute);font:italic 400 14px var(--serif)}
+.x{font:inherit;font-size:20px;line-height:1;color:var(--mute);background:none;border:0;padding:2px 6px;margin-right:-6px;cursor:pointer}
+.empty{text-align:center;color:var(--mute);font:italic 400 16px var(--serif);margin-top:36px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:5;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast button{font:inherit;font-weight:700;color:var(--acc);background:none;border:0;margin-left:10px;cursor:pointer}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:22px}
+.bar{height:8px;border:1px solid var(--rule);border-radius:4px;margin-top:6px;overflow:hidden}
+.bar u{display:block;height:100%;background:var(--acc)}
+.awning{height:16px;background:repeating-linear-gradient(90deg,var(--c1) 0 28px,var(--c2) 28px 56px,var(--c3) 56px 84px,var(--c4) 84px 112px)}
+h1{font-size:38px}
+input{background:var(--bg);border:2px solid var(--rule);border-radius:12px}
+input:focus{border-color:var(--acc)}
+.slip{background:var(--card);border:2px solid var(--ink);border-radius:20px;padding:16px;box-shadow:6px 6px 0 var(--c1)}
+.sub{display:inline-block;background:var(--acc);color:var(--accInk);border-radius:999px;padding:5px 14px;font:600 14px var(--sans)}
+.chip.mc{border-color:var(--mc);background:color-mix(in srgb,var(--mc) 20%,transparent)}
+.chip.mc.on{background:var(--mc);color:var(--on);font-weight:600}
+h2{border-bottom:3px solid var(--mc,var(--acc))}
+h2 span,.l span{background:color-mix(in srgb,var(--mc,var(--acc)) 24%,transparent);color:var(--ink);border-radius:999px;padding:2px 11px;font:600 13px var(--sans)}
+.l i{border-bottom-color:var(--mc,var(--rule))}
+.d{display:flex;gap:12px;align-items:flex-start}
+.bx{flex:1;min-width:0}
+.bd{flex:none;width:42px;height:42px;border-radius:14px;background:var(--mc);display:grid;place-items:center;font-size:22px}
+.bar{height:10px;border-width:2px}
+.bar u{background:linear-gradient(90deg,var(--c1),var(--c3),var(--acc))}
+@media (min-width:860px){.wrap{max-width:1040px;display:grid;grid-template-columns:360px 1fr;column-gap:48px;align-items:start;padding-top:32px}.side{position:sticky;top:max(20px,env(safe-area-inset-top,0px))}.main{min-width:0}.tabs{margin-top:8px}}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="awning"></div>
+<div class="wrap">
+  <div class="side"><div class="top"><h1>Food Log</h1><button class="chip" id="theme" aria-label="Change theme">Auto</button></div>
+  <div class="sub" id="sub"></div>
+
+  <div class="slip">
+    <input id="name" list="foods" placeholder="What did you eat?" autocomplete="off" enterkeyhint="done">
+    <datalist id="foods"></datalist>
+    <div class="chips" id="meals"></div>
+    <div class="row">
+      <input id="kcal" type="number" inputmode="numeric" min="0" placeholder="Calories (optional)">
+      <input id="when" type="datetime-local">
+    </div>
+    <input id="note" style="margin-top:8px" placeholder="Note (optional)">
+    <button class="btn" id="add">Add to log</button>
+  </div>
+
+  <div id="fav"></div>
+  </div>
+  <div class="main">
+  <div class="tabs" id="tabs"></div>
+  <input id="q" type="search" placeholder="Search your log" style="margin-top:12px">
+  <div id="list"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY="foodlog:v1";
+const MEALS=[["breakfast","Breakfast"],["lunch","Lunch"],["dinner","Dinner"],["snack","Snack"]];
+const EMO=["🍳","🍱","🍝","🍎"];
+const mi=m=>Math.max(0,MEALS.findIndex(x=>x[0]===m));
+const mv=m=>"var(--c"+(mi(m)+1)+")";
+const $=s=>document.querySelector(s);
+const pref=(k,v)=>{try{if(v===undefined)return localStorage.getItem("foodlog:"+k);localStorage.setItem("foodlog:"+k,v)}catch(e){}};
+let items=[],favs=[],tt,view=pref("view")||"days";
+try{items=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){items=[]}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){}};
+let meal=(h=>h<10?"breakfast":h<15?"lunch":h<18?"snack":"dinner")(new Date().getHours());
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const p2=n=>String(n).padStart(2,"0");
+const local=d=>d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate())+"T"+p2(d.getHours())+":"+p2(d.getMinutes());
+const tm=ts=>new Date(ts).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+function dayLabel(d){
+  const t=new Date();t.setHours(0,0,0,0);
+  const n=Math.round((t-new Date(d.getFullYear(),d.getMonth(),d.getDate()))/864e5);
+  return n===0?"Today":n===1?"Yesterday":d.toLocaleDateString([],{weekday:"long",month:"short",day:"numeric"});
+}
+function toast(msg,undo){
+  const t=$("#toast");
+  t.innerHTML=esc(msg)+(undo?'<button id="u">Undo</button>':"");
+  t.classList.add("show");
+  if(undo)$("#u").onclick=()=>{undo();t.classList.remove("show")};
+  clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),4000);
+}
+function add(name,m,kcal,note,ts){
+  name=name.trim();if(!name)return;
+  items.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),name,meal:m,kcal:Math.round(+kcal)||0,note:(note||"").trim(),ts});
+  items.sort((a,b)=>b.ts-a.ts);save();render();
+}
+function render(){
+  $("#meals").innerHTML=MEALS.map((m,n)=>`<button class="chip mc${m[0]===meal?" on":""}" data-m="${m[0]}" style="--mc:var(--c${n+1})">${EMO[n]} ${m[1]}</button>`).join("");
+  const t0=new Date();t0.setHours(0,0,0,0);
+  const today=items.filter(i=>i.ts>=t0.getTime());
+  const kc=today.reduce((a,i)=>a+i.kcal,0);
+  $("#sub").textContent=today.length?`Today you logged ${today.length} ${today.length===1?"item":"items"}${kc?", "+kc+" kcal":""}`:"Nothing logged today yet";
+  const cnt={};
+  items.forEach(i=>{const k=i.name.toLowerCase();(cnt[k]=cnt[k]||{n:i.name,c:0,k:i.kcal,m:i.meal}).c++});
+  const top=Object.values(cnt).sort((a,b)=>b.c-a.c);
+  favs=top.slice(0,6);
+  $("#foods").innerHTML=top.map(f=>`<option value="${esc(f.n)}">`).join("");
+  $("#fav").innerHTML=favs.length?`<div class="h3">Eat again</div><div class="chips">${favs.map((f,i)=>`<button class="chip mc" data-f="${i}" style="--mc:${mv(f.m)}">${EMO[mi(f.m)]} ${esc(f.n)} (${f.c})</button>`).join("")}</div>`:"";
+  const q=$("#q").value.trim().toLowerCase();
+  const rows=items.filter(i=>!q||(i.name+" "+i.note).toLowerCase().includes(q));
+  const g={};
+  rows.forEach(i=>{const d=new Date(i.ts),k=d.toDateString();(g[k]=g[k]||{d,a:[]}).a.push(i)});
+  const empty=`<p class="empty"><span style="font-size:52px">🍽️</span><br>${items.length?"No matches found.":"Your menu is empty. Add the first thing you ate."}</p>`;
+  const weekHtml=()=>{
+    const out=[];
+    for(let n=0;n<7;n++){
+      const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-n);
+      const e=new Date(d);e.setDate(e.getDate()+1);
+      const a=rows.filter(i=>i.ts>=d.getTime()&&i.ts<e.getTime());
+      out.push({d,n:a.length,k:a.reduce((s,i)=>s+i.kcal,0)});
+    }
+    const useK=out.some(o=>o.k),val=o=>useK?o.k:o.n,mx=Math.max(1,...out.map(val));
+    return `<h2>Last 7 days<span>${out.reduce((s,o)=>s+o.n,0)} items</span></h2>`+out.map(o=>`<div class="it"><div class="l"><b>${dayLabel(o.d)}</b><i></i><span>${o.n} ${o.n===1?"item":"items"}${o.k?", "+o.k+" kcal":""}</span></div><div class="bar"><u style="width:${Math.round(100*val(o)/mx)}%"></u></div></div>`).join("");
+  };
+  const mealsHtml=()=>MEALS.map((m,n)=>{
+    const a=rows.filter(i=>i.meal===m[0]);if(!a.length)return "";
+    const c={};a.forEach(i=>{const k=i.name.toLowerCase();(c[k]=c[k]||{n:i.name,c:0}).c++});
+    return `<h2 style="--mc:var(--c${n+1})">${EMO[n]} ${m[1]}<span>${a.length} logged</span></h2>`+Object.values(c).sort((x,y)=>y.c-x.c).map(f=>`<div class="it"><div class="l"><b>${esc(f.n)}</b><i></i><span>${f.c}×</span></div></div>`).join("");
+  }).join("")||empty;
+  const foodsHtml=()=>{
+    const a=top.filter(f=>!q||f.n.toLowerCase().includes(q));
+    return a.length?`<h2>Most eaten<span>${a.length} ${a.length===1?"food":"foods"}</span></h2>`+a.map(f=>`<div class="it"><div class="l"><b>${esc(f.n)}</b><i></i><span>${f.c} ${f.c===1?"time":"times"}${f.k?", "+f.k+" kcal":""}</span></div></div>`).join(""):empty;
+  };
+  const dayHtml=()=>Object.values(g).map(x=>{
+    const s=x.a.reduce((a,i)=>a+i.kcal,0);
+    return `<h2>${dayLabel(x.d)}<span>${s?s+" kcal":""}</span></h2>`+x.a.map(i=>{
+      const m=(MEALS.find(m=>m[0]===i.meal)||MEALS[3])[1];
+      return `<div class="it d" style="--mc:${mv(i.meal)}"><div class="bd">${EMO[mi(i.meal)]}</div><div class="bx"><div class="l"><b>${esc(i.name)}</b><i></i>${i.kcal?`<span>${i.kcal} kcal</span>`:""}<button class="x" data-d="${i.id}" aria-label="Delete ${esc(i.name)}">×</button></div><div class="m">${m} at ${tm(i.ts)}${i.note?"<br>"+esc(i.note):""}</div></div></div>`;
+    }).join("");
+  }).join("")||empty;
+  $("#list").innerHTML=({days:dayHtml,week:weekHtml,meals:mealsHtml,foods:foodsHtml}[view]||dayHtml)();
+  $("#tabs").innerHTML=[["days","Days"],["week","Week"],["meals","Meals"],["foods","Top foods"]].map(t=>`<button class="chip${t[0]===view?" on":""}" data-v="${t[0]}">${t[1]}</button>`).join("");
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.v){view=b.dataset.v;pref("view",view);render()}
+  else if(b.dataset.m){meal=b.dataset.m;render()}
+  else if(b.dataset.f){const f=favs[+b.dataset.f];add(f.n,meal,f.k,"",Date.now());toast("Added "+f.n)}
+  else if(b.dataset.d){
+    const i=items.findIndex(x=>x.id===b.dataset.d);
+    if(i>-1){const r=items.splice(i,1)[0];save();render();
+      toast("Deleted",()=>{items.push(r);items.sort((a,b)=>b.ts-a.ts);save();render()})}
+  }
+});
+$("#add").onclick=()=>{
+  if(!$("#name").value.trim()){$("#name").focus();return}
+  const ts=$("#when").value?new Date($("#when").value).getTime():Date.now();
+  add($("#name").value,meal,$("#kcal").value,$("#note").value,ts);
+  ["#name","#kcal","#note"].forEach(s=>$(s).value="");
+  $("#when").value=local(new Date());toast("Added to log");
+};
+$("#q").oninput=render;
+const THEMES=["auto","light","dark"];
+function applyTheme(){const t=pref("theme")||"auto",r=document.documentElement;t==="auto"?r.removeAttribute("data-theme"):r.setAttribute("data-theme",t);$("#theme").textContent=t[0].toUpperCase()+t.slice(1)}
+$("#theme").onclick=()=>{pref("theme",THEMES[(THEMES.indexOf(pref("theme")||"auto")+1)%3]);applyTheme()};
+applyTheme();
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)$("#when").value=local(new Date())});
+$("#when").value=local(new Date());
+render();
+
+// Best-effort home screen icon and manifest
+try{
+  const c=document.createElement("canvas");c.width=c.height=192;
+  const x=c.getContext("2d");x.fillStyle="#7c4dff";x.fillRect(0,0,192,192);
+  x.font="110px serif";x.textAlign="center";x.textBaseline="middle";x.fillText("🍽️",96,102);
+  const icon=c.toDataURL("image/png");
+  const a=document.createElement("link");a.rel="apple-touch-icon";a.href=icon;document.head.appendChild(a);
+  const mf={name:"Food Log",short_name:"Food Log",display:"standalone",background_color:"#7c4dff",theme_color:"#7c4dff",start_url:location.href,icons:[{src:icon,sizes:"192x192",type:"image/png"}]};
+  const k=document.createElement("link");k.rel="manifest";
+  k.href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:"application/manifest+json"}));
+  document.head.appendChild(k);
+}catch(e){}
+</script>
+</body>
+</html>
